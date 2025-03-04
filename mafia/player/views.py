@@ -1,14 +1,32 @@
 from django.http import HttpResponse, HttpResponseNotFound, Http404
 from django.shortcuts import render, redirect
 from django.urls import reverse
-
+from django.template.loader import render_to_string
 
 # Create your views here.
 
+menu = ["О сайте", "Игроки", "Обратная связь", "Войти"]
+
+
+class MyClass:
+    def __init__(self, a, b):
+        self.a = a
+        self.b = b
+
 
 def index(request):
-    return HttpResponse("Hello, world. You're visited Mafia's main page.")
-    # return render(request, 'player/index.html')
+    data = {'title': 'Main page', 'menu': menu, 'float': 28.56,
+            'lst': [1, 2, 'abd', True], 'set': {1, 2, 3, 2, 5}, 'dict': {'key_1': 'value_1', 'key_2': 'value_2'},
+            'obj': MyClass(10, 20)}
+    return render(request, 'player/index.html', context=data)
+    # t = render_to_string('player/index.html')
+    # return HttpResponse(t)
+    # return HttpResponse("Hello, world. You're visited Mafia's main page.")
+
+
+def about(request):
+    data = {'title': 'About page'}
+    return render(request, 'player/about.html', data)
 
 
 def players(request):
@@ -30,7 +48,6 @@ def playerslug(request, player_name):
         raise Http404()
     else:
         return HttpResponse(f"Player {player_name}")
-
 
 
 def page_not_found(request, exception):

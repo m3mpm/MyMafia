@@ -2,10 +2,13 @@ from django.http import HttpResponse, HttpResponseNotFound, Http404
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.template.loader import render_to_string
+from django.template.defaultfilters import slugify
 
 # Create your views here.
-
-menu = ["О сайте", "Игроки", "Обратная связь", "Войти"]
+menu = [{'title': "О сайте", 'url_name': 'about'},
+        {'title': "Обратная связь", 'url_name': 'contact'},
+        {'title': "Войти", 'url_name': 'login'},
+        ]
 
 
 class MyClass:
@@ -26,7 +29,15 @@ def index(request):
 
 def about(request):
     data = {'title': 'About page'}
-    return render(request, 'player/about.html', data)
+    return render(request, 'player/about.html', {'title': 'About', 'menu': menu})
+
+
+def contact(request):
+    return HttpResponse("Обратная связь")
+
+
+def login(request):
+    return HttpResponse("Авторизоваться")
 
 
 def players(request):
@@ -53,3 +64,4 @@ def playerslug(request, player_name):
 def page_not_found(request, exception):
     # return render(request, '<h1>404.html</h1>')
     return HttpResponseNotFound("Sorry, we couldn't find that page.")
+
